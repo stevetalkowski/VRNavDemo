@@ -20,6 +20,7 @@ struct ImmersiveView: View {
     @State private var cameraController = CameraController()
     @State private var sceneRoot: Entity?
     @State private var teleportIndicator = ModelEntity()
+//    MARK: Here we create the Tick
     @State private var timer = Timer.publish(every: 1.0 / 60.0, on: .main, in: .common).autoconnect()
 
     // Snap rotation and teleportation settings
@@ -60,6 +61,7 @@ struct ImmersiveView: View {
             }
             GCController.startWirelessControllerDiscovery(completionHandler: nil)
         }
+//        MARK: here we are reacting to the Tick
         .onReceive(timer) { _ in
             guard let controller = controller,
                   let gamepad = controller.extendedGamepad,

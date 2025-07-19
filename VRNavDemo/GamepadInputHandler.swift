@@ -58,9 +58,26 @@ class GamepadInputHandler: ObservableObject {
             return
         }
 
+        
+        gamepad.allButtons.forEach { button in
+            if button.isPressed {
+                switch button {
+                    case gamepad.buttonA:
+                        print("🎮 Button A pressed")
+                    case gamepad.buttonB:
+                        print("🎮 Button B pressed")
+                    case gamepad.buttonX:
+                        print("🎮 Button X pressed")
+                    case gamepad.buttonY:
+                        print("🎮 Button Y pressed")
+                    default:
+                        print("🎮 Unknown button pressed: \(button)")
+                }
+            }
+        }
         controller.playerIndex = .index1  // This is valid
         // Removed `controller.isPaused = false` — not part of GCController
-
+        
         gamepad.leftThumbstick.valueChangedHandler = { [weak self] _, x, y in
             print("🎮 Left stick moved: x=\(x), y=\(y)")
             self?.updateMove(SIMD3<Float>(x, 0, y))
