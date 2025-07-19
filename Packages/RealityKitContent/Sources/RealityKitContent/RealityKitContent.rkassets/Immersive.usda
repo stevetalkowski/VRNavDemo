@@ -1,0 +1,310 @@
+#usda 1.0
+(
+    defaultPrim = "Root"
+    metersPerUnit = 1
+    upAxis = "Y"
+)
+
+reorder rootPrims = ["Root", "GridMaterial"]
+
+def Xform "Root"
+{
+    reorder nameChildren = ["GridMaterial", "VR_room_tmp", "Cube", "Toy_Robot", "Toy_Drummer", "SkyDome", "SkySphere", "IBL"]
+    def "GridMaterial" (
+        active = true
+        references = @Materials/GridMaterial.usda@
+    )
+    {
+        quatf xformOp:orient = (1, 0, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def "VR_room_tmp" (
+        active = true
+        references = @VR_room_tmp.usdz@
+    )
+    {
+        float3 xformOp:scale = (0.01, 0.01, 0.01)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def RealityKitComponent "ImageBasedLightReceiver"
+        {
+            rel iblEntity = </Root/IBL>
+            uniform token info:id = "RealityKit.ImageBasedLightReceiver"
+        }
+
+        over "mtl"
+        {
+            over "usdPreviewSurface3SG"
+            {
+                token outputs:mtlx:surface
+                token outputs:realitykit:vertex
+
+                over "usdPreviewSurface3"
+                {
+                    color3f inputs:diffuseColor = (0.5, 0.49082685, 0.49839884) (
+                        colorSpace = "srgb_displayp3"
+                    )
+                    float inputs:metallic = 1
+                    float inputs:roughness = 0
+                }
+            }
+
+            over "usdPreviewSurface1SG"
+            {
+                token outputs:mtlx:surface
+                token outputs:realitykit:vertex
+                float2 ui:nodegraph:realitykit:subgraphOutputs:pos = (0, 110.5)
+
+                over "usdPreviewSurface1"
+                {
+                    color3f inputs:diffuseColor = (0.49272355, 0.4695724, 0.49392578) (
+                        colorSpace = "srgb_displayp3"
+                    )
+                    float inputs:roughness = 0.1
+                }
+            }
+
+            over "usdPreviewSurface2SG"
+            {
+                token outputs:mtlx:surface
+                token outputs:realitykit:vertex
+
+                over "usdPreviewSurface2"
+                {
+                    color3f inputs:diffuseColor = (0.7812859, 0.56730413, 0.1458226) (
+                        colorSpace = "srgb_displayp3"
+                    )
+                    float inputs:roughness = 0.2
+                }
+            }
+
+            over "initialShadingGroup"
+            {
+                token outputs:mtlx:surface
+                token outputs:realitykit:vertex
+                float2 ui:nodegraph:realitykit:subgraphOutputs:pos = (0, 110.5)
+            }
+        }
+
+        over "Front_Wall" (
+            active = false
+        )
+        {
+        }
+
+        over "Back_Wall" (
+            active = false
+        )
+        {
+        }
+
+        over "Left_Wall" (
+            active = false
+        )
+        {
+        }
+
+        over "Right_Wall" (
+            active = false
+        )
+        {
+        }
+
+        over "pCube37"
+        {
+            quatf xformOp:orient = (1, 0, 0, 0)
+            float3 xformOp:scale = (1, 1, 1)
+            double3 xformOp:translate = (0, 50, -300)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+        }
+    }
+
+    def Cube "Cube" (
+        active = false
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Root/Cube/DefaultMaterial>
+        double size = 1
+        quatf xformOp:orient = (1, 0, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (3.2740357, 0.5, -0.98339313)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def Material "DefaultMaterial"
+        {
+            prepend token outputs:surface.connect = </Root/Cube/DefaultMaterial/DefaultSurfaceShader.outputs:surface>
+
+            def Shader "DefaultSurfaceShader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (1, 1, 1)
+                float inputs:roughness = 0.75
+                token outputs:surface
+            }
+        }
+    }
+
+    def "Toy_Robot" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (0, 0.8812926, 0)
+        }
+        references = @Robot.usdz@
+    )
+    {
+        quatf xformOp:orient = (0.90447617, 0, 0.42652407, 0)
+        float3 xformOp:scale = (5, 5.0000005, 5)
+        float3 xformOp:translate = (-1.3973061, 0, -2.0246043)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def RealityKitComponent "ImageBasedLightReceiver"
+        {
+            rel iblEntity = </Root/IBL>
+            uniform token info:id = "RealityKit.ImageBasedLightReceiver"
+        }
+    }
+
+    def "Toy_Drummer" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (0, -0.9232778, 0)
+        }
+        references = @Drummer.usdz@
+    )
+    {
+        quatf xformOp:orient = (0.8953237, 0, -0.44541603, 0)
+        float3 xformOp:scale = (5, 5, 5)
+        float3 xformOp:translate = (1.3982794, 0, -1.8899218)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def RealityKitComponent "ImageBasedLightReceiver"
+        {
+            rel iblEntity = </Root/IBL>
+            uniform token info:id = "RealityKit.ImageBasedLightReceiver"
+        }
+    }
+
+    def "SkyDome" (
+        active = false
+        prepend references = @SkyDome.usdz@
+    )
+    {
+        float3 xformOp:scale = (0.01, 0.01, 0.01)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "Looks"
+        {
+            over "GridMATSG"
+            {
+                token cullMode = "none" (
+                    allowedTokens = ["unspecified", "none", "front", "back"]
+                )
+                token outputs:mtlx:surface
+                token outputs:realitykit:vertex
+            }
+
+            over "GroundMATSG"
+            {
+                token outputs:mtlx:surface
+                token outputs:realitykit:vertex
+            }
+
+            over "DomeMATSG"
+            {
+                token inputs:frame:stPrimvarName = "st" (
+                    customData = {
+                        dictionary realitykit = {
+                            bool hide = 1
+                        }
+                    }
+                )
+                token outputs:mtlx:surface
+                token outputs:realitykit:vertex
+
+                def Shader "diffuseColor"
+                {
+                    uniform token info:id = "UsdUVTexture"
+                    asset inputs:file = @small_hangar_01_4k.exr@
+                    float2 inputs:st.connect = </Root/SkyDome/Looks/DomeMATSG/diffuseColor/TexCoordReader.outputs:result>
+                    color3f outputs:rgb
+
+                    def Shader "TexCoordReader"
+                    {
+                        uniform token info:id = "UsdPrimvarReader_float2"
+                        token inputs:varname.connect = </Root/SkyDome/Looks/DomeMATSG.inputs:frame:stPrimvarName>
+                        float2 outputs:result
+                    }
+                }
+
+                over "DomeMAT"
+                {
+                    color3f inputs:diffuseColor.connect = </Root/SkyDome/Looks/DomeMATSG/diffuseColor.outputs:rgb>
+                }
+            }
+        }
+
+        over "Grid" (
+            active = false
+        )
+        {
+        }
+
+        over "Ground_01" (
+            active = false
+        )
+        {
+        }
+    }
+
+    def "SkySphere" (
+        active = true
+        references = @SkySphere.usdz@
+    )
+    {
+        float3 xformOp:scale = (1, 1, 1)
+
+        over "SkySphere_mat"
+        {
+            asset inputs:SkySphere_Texture = @small_hangar_01_4k.exr@
+        }
+    }
+
+    def Xform "IBL" (
+        active = true
+    )
+    {
+        def RealityKitComponent "ImageBasedLight"
+        {
+            asset ibl = @small_hangar_01_1k.exr@
+            uniform token info:id = "RealityKit.ImageBasedLight"
+            bool isGlobalIBL = 0
+        }
+    }
+
+    def Xform "DirectionalLight" (
+        customData = {
+            float3 rotationEulerHint = (-0.80691814, 1.9582039, 0.053544044)
+        }
+    )
+    {
+        quatf xformOp:orient = (0.5040773, -0.23933655, 0.75721973, 0.3394737)
+        float3 xformOp:scale = (1, 0.99999994, 0.99999994)
+        float3 xformOp:translate = (-2.880911e-9, 1.6426426, -1.6715601e-8)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def RealityKitComponent "DirectionalLight"
+        {
+            token info:id = "RealityKit.DirectionalLight"
+
+            def RealityKitStruct "Shadow"
+            {
+                bool isEnabled = 1
+            }
+        }
+    }
+}
+
