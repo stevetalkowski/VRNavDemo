@@ -9,7 +9,7 @@ reorder rootPrims = ["Root", "GridMaterial"]
 
 def Xform "Root"
 {
-    reorder nameChildren = ["GridMaterial", "VR_room_tmp", "Cube", "Toy_Robot", "Toy_Drummer", "SkyDome", "SkySphere", "IBL"]
+    reorder nameChildren = ["GridMaterial", "VR_room_tmp", "Cube", "Toy_Robot", "Toy_Drummer", "SkyDome", "SkySphere", "IBL", "cube_move", "robo_anim"]
     def "GridMaterial" (
         active = true
         references = @Materials/GridMaterial.usda@
@@ -119,6 +119,36 @@ def Xform "Root"
             float3 xformOp:scale = (1, 1, 1)
             double3 xformOp:translate = (0, 50, -300)
             uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+            def RealityKitComponent "RCP_BehaviorsContainer"
+            {
+                rel behaviors = </Root/VR_room_tmp/pCube37/OnTap>
+                uniform token info:id = "RCP.BehaviorsContainer"
+            }
+
+            def Preliminary_Behavior "OnTap"
+            {
+                rel actions = </Root/VR_room_tmp/pCube37/OnTap/Action>
+                uniform bool exclusive
+                rel triggers = </Root/VR_room_tmp/pCube37/OnTap/Trigger>
+
+                def Preliminary_Trigger "Trigger"
+                {
+                    rel affectedObjects = </Root/VR_room_tmp/pCube37>
+                    token info:id = "TapGesture"
+                }
+
+                def Preliminary_Action "Action"
+                {
+                    rel affectedObjects = </Root>
+                    rel animationLibraryKey = </Root/cube_move>
+                    rel animationLibraryKeyOverrideKey = </Root/VR_room_tmp/pCube37/OnTap/Trigger>
+                    token info:id = "PlayTimeline"
+                    int loops = 0
+                    int performCount = 1
+                    token type = "serial"
+                }
+            }
         }
     }
 
@@ -303,6 +333,141 @@ def Xform "Root"
             def RealityKitStruct "Shadow"
             {
                 bool isEnabled = 1
+            }
+        }
+    }
+
+    def "robot_anim" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (0, 1.5707963, 0)
+        }
+        references = @robot_anim.usdz@
+    )
+    {
+        quatf xformOp:orient = (0.71247, 0, 0.7017025, 0)
+        float3 xformOp:scale = (0.0601815, 0.0601815, 0.0601815)
+        float3 xformOp:translate = (-2.799819, 0, 1.071755)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def RealityKitComponent "RCP_BehaviorsContainer"
+        {
+            rel behaviors = </Root/robot_anim/OnTap>
+            uniform token info:id = "RCP.BehaviorsContainer"
+        }
+
+        def Preliminary_Behavior "OnTap"
+        {
+            rel actions = </Root/robot_anim/OnTap/Action>
+            uniform bool exclusive
+            rel triggers = </Root/robot_anim/OnTap/Trigger>
+
+            def Preliminary_Trigger "Trigger"
+            {
+                rel affectedObjects = </Root/robot_anim>
+                token info:id = "TapGesture"
+            }
+
+            def Preliminary_Action "Action"
+            {
+                rel affectedObjects = </Root>
+                rel animationLibraryKey = </Root/robo_anim>
+                rel animationLibraryKeyOverrideKey = </Root/robot_anim/OnTap/Trigger>
+                token info:id = "PlayTimeline"
+                int loops = 0
+                int performCount = 1
+                token type = "serial"
+            }
+        }
+
+        def RealityKitComponent "AnimationLibrary"
+        {
+            token info:id = "RealityKit.AnimationLibrary"
+
+            def RealityKitAnimationFile "default_subtree_animation"
+            {
+                uniform bool looping = 1
+                uniform string name = "default subtree animation"
+            }
+        }
+    }
+
+    def RealityKitTimeline "cube_move"
+    {
+        reorder nameChildren = ["Track", "Track2"]
+        def RealityKitTrack "Track2"
+        {
+            def RealityKitAction "Transform_To"
+            {
+                string actionKind = "moveTo"
+                int blendLayer = 300
+                double duration = 1
+                uniform token info:id = "CD5A9D8C-70DC-450C-A804-C49C51A6A11B"
+                float3 position = (136.23701, 49.999638, -299.9985)
+                quatf rotation = (1, 0, 0, 0)
+                float3 scale = (1, 1, 1)
+                double startTime = 0
+                rel target = </Root/VR_room_tmp/pCube37>
+
+                def RealityKitStruct "transformMode"
+                {
+                    rel referenceEntity = </Root>
+                    token type = "parent"
+                }
+
+                def RealityKitStruct "timingFunction"
+                {
+                }
+            }
+        }
+    }
+
+    def RealityKitTimeline "robo_anim"
+    {
+        reorder nameChildren = ["Track", "Track2"]
+        def RealityKitTrack "Track"
+        {
+            def RealityKitAction "Animation"
+            {
+                string actionKind = "animation"
+                string animation = "default subtree animation"
+                int blendLayer = 500
+                double duration = 2.4666666984558105
+                uniform token info:id = "2CAA47BF-7839-45C0-BCB1-4643931CA311"
+                bool separateAnimatedValue = 1
+                double startTime = 0
+                rel target = </Root/robot_anim>
+
+                def RealityKitStruct "handoffType"
+                {
+                }
+            }
+        }
+
+        def RealityKitTrack "Track2"
+        {
+            def RealityKitAction "Transform_To"
+            {
+                string actionKind = "moveTo"
+                int blendLayer = 300
+                double duration = 2.474923815547378
+                uniform token info:id = "D9C9ACC8-DDA9-4934-9F45-E9224E1693EA"
+                float3 position = (-1.0710866, 0, 1.071755)
+                quatf rotation = (0.71247005, 0, 0.70170254, 0)
+                float3 scale = (0.060181487, 0.06018149, 0.060181487)
+                double startTime = 0
+                rel target = </Root/robot_anim>
+
+                def RealityKitStruct "transformMode"
+                {
+                    rel referenceEntity = </Root>
+                    token type = "parent"
+                }
+
+                def RealityKitStruct "timingFunction"
+                {
+                    token type = "linear"
+                }
             }
         }
     }
