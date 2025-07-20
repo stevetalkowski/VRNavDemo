@@ -66,7 +66,15 @@ struct ImmersiveView: View {
             guard let controller = controller,
                   let gamepad = controller.extendedGamepad,
                   let sceneRoot = sceneRoot else { return }
-
+            
+            func facebuttonPressed(for controller: GCController) {
+                controller.extendedGamepad?.allButtons.forEach { key in
+                    if key.isPressed {
+                        print("key pressed: \(key)")
+                    }
+                }
+            }
+            facebuttonPressed(for: controller)
             let leftX = gamepad.leftThumbstick.xAxis.value
             let leftY = gamepad.leftThumbstick.yAxis.value
             let rightX = gamepad.rightThumbstick.xAxis.value
@@ -110,8 +118,8 @@ struct ImmersiveView: View {
             } else {
                 teleportIndicator.isEnabled = false
             }
-
-            print("🎮 pos=\(cameraController.position) yaw=\(cameraController.yaw)")
+//            print("🎮 pos=\(cameraController.position) yaw=\(cameraController.yaw)") // causing to much output
+            
         }
     }
 }

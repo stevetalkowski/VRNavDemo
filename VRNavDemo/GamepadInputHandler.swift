@@ -13,7 +13,7 @@ class GamepadInputHandler: ObservableObject {
     
     @Published private(set) var move = SIMD3<Float>(repeating: 0)
     @Published private(set) var look = SIMD2<Float>(repeating: 0)
-
+    
     func updateMove(_ newMove: SIMD3<Float>) {
         DispatchQueue.main.async {
             self.move = newMove
@@ -49,7 +49,7 @@ class GamepadInputHandler: ObservableObject {
             setupObservers(for: controller)
         }
     }
-
+    
     private func setupObservers(for controller: GCController) {
         print("✅ Controller connected: \(controller.vendorName ?? "Unknown")")
 
@@ -58,23 +58,6 @@ class GamepadInputHandler: ObservableObject {
             return
         }
 
-        
-        gamepad.allButtons.forEach { button in
-            if button.isPressed {
-                switch button {
-                    case gamepad.buttonA:
-                        print("🎮 Button A pressed")
-                    case gamepad.buttonB:
-                        print("🎮 Button B pressed")
-                    case gamepad.buttonX:
-                        print("🎮 Button X pressed")
-                    case gamepad.buttonY:
-                        print("🎮 Button Y pressed")
-                    default:
-                        print("🎮 Unknown button pressed: \(button)")
-                }
-            }
-        }
         controller.playerIndex = .index1  // This is valid
         // Removed `controller.isPaused = false` — not part of GCController
         
